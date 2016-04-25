@@ -1,9 +1,6 @@
 package hudson.plugins.promoted_builds;
 
-import hudson.model.AbstractBuild;
-import hudson.model.AbstractProject;
-import hudson.model.Action;
-import hudson.model.BuildBadgeAction;
+import hudson.model.*;
 import hudson.model.Cause.UserCause;
 import hudson.util.CopyOnWriteList;
 import org.kohsuke.stapler.HttpResponse;
@@ -44,6 +41,10 @@ public final class PromotedBuildAction implements BuildBadgeAction {
     public PromotedBuildAction(AbstractBuild<?,?> owner, Status firstStatus) {
         this(owner);
         statuses.add(firstStatus);
+    }
+
+    public Api getApi() {
+        return new Api(this);
     }
 
     /**
@@ -97,7 +98,7 @@ public final class PromotedBuildAction implements BuildBadgeAction {
     /**
      * Gets the read-only view of all the promotions that this build achieved.
      */
-    @Exported
+    @Exported(inline = true)
     public List<Status> getPromotions() {
         return statuses.getView();
     }
